@@ -1,0 +1,95 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap');
+
+:root {
+    --background: #555250;
+}
+
+body {
+    margin: 0;
+    height: 100svh;
+    display: flex;
+    flex-direction: column;
+    place-content: center;
+    place-items: center;
+    background-color: var(--background);
+    color: #f5f3ef;
+    font-family: 'Inter', sans-serif;
+    font-weight: 700;
+    gap: 1rem;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+.gamestate {
+    font-size: 2rem;
+    text-shadow: 0px 3px 5px #31302f;
+}
+
+.gameboard {
+    display: grid;
+    grid-template-columns: repeat(3, 100px);
+    grid-template-rows: repeat(3, 100px);
+    place-content: center;
+    place-items: center;
+    gap: .375rem;
+}
+
+.square {
+    display: flex;
+    place-content: center;
+    place-items: center;
+    background-color: #f0ece9;
+    height: 100%;
+    width: 100%;
+    cursor: pointer;
+    border-radius: .625rem;
+    box-shadow: 0px 3px 5px #31302f;
+    transform: rotateY(180deg)
+    scale(1);
+    scale: 1;
+    transition: all .15s, transform 1s;
+    position: relative;
+    transform-style: preserve-3d;
+}
+
+.square::before {
+    content: '';
+    height: 100%;
+    width: 100%;
+    background-color: #f0ece9;
+    position: absolute;
+    border-radius: .625rem;
+    transform: translateZ(-1px);
+}
+
+.square:hover {
+    box-shadow: 0px 6px 10px #31302f;
+    transform:  rotateY(180deg);
+    scale: 1.03;
+}
+
+.square:active {
+    box-shadow: 0px 3px 5px #31302f;
+    transform:  rotateY(180deg);
+    scale: .98;
+}
+
+.square.p1 {
+    background-color: #f7e1e1;
+    transform: rotateY(0deg);
+}
+
+.square.p1 svg {
+    fill: #e67f7f;
+}
+
+.square.p2 {
+    background-color: #e1eaf7;
+    transform: rotateY(0deg);
+}
+
+.square.p2 svg {
+    fill: #7f9ae6;
+}
