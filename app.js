@@ -1,5 +1,5 @@
 const Gameboard = (function () {
-    const board = [0, 0, 0, 0, 0, 0, 0, 0, 0];
+    let board = [0, 0, 0, 0, 0, 0, 0, 0, 0];
 
     const getBoard = () => board;
 
@@ -28,15 +28,30 @@ const Gameboard = (function () {
             squareIndex++;
         }
     };
-    return {getBoard, placeMark, drawBoard};
+
+    const resetBoard = () => {
+        squares = document.querySelector('.gameboard').childNodes;
+        squares.forEach(function (square) {
+            square.innerHTML = '';
+            if (square.classList.contains('p1')) square.classList.remove('p1');
+            if (square.classList.contains('p2')) square.classList.remove('p2');
+        });
+        board = [0, 0, 0, 0, 0, 0, 0, 0, 0];
+    }
+    return {getBoard, placeMark, drawBoard, resetBoard};
 })();
 
 const GameController = (function () {
-    const board = Gameboard.getBoard();
+    let board = Gameboard.getBoard();
 
     let turn = 1;
     let gameOver = 0;
     let winner = 0;
+    let gamesPlayed = 0;
+    let p1Score = 0;
+    let p2Score = 0;
+    const p1Board = document.querySelector('.p1Score').firstChild;
+    const p2Board = document.querySelector('.p2Score').firstChild;
 
     const getTurn = () => turn % 2 ? 1 : 2;
 
@@ -57,9 +72,18 @@ const GameController = (function () {
     const updateGamestate = () => {
         const gamestateText = document.querySelector('.gamestate');
         if (gameOver && winner) {
-            return gamestateText.textContent = `Player ${winner} wins!`
+            gamestateText.textContent = `Player ${winner} wins!`;
+            setTimeout(function() {
+                if (document.querySelector('.replay').classList.contains('hide')) document.querySelector('.replay').classList.remove('hide');
+                document.querySelector('.replay').classList.add('show');
+              }, 500);
+            return;
         } else if (gameOver) {
-            return gamestateText.textContent = `Tie!`
+            setTimeout(function() {
+                if (document.querySelector('.replay').classList.contains('hide')) document.querySelector('.replay').classList.remove('hide');
+                document.querySelector('.replay').classList.add('show');
+              }, 500);
+            return gamestateText.textContent = `Tie!`;
         }
         gamestateText.textContent = `Player ${getTurn()}'s turn`;
     }
@@ -73,17 +97,32 @@ const GameController = (function () {
             let c = board[winLine[2] - 1];
             if(a == 2 && b == 2 && c == 2) {
                 winner = 2;
+                p2Score++;
                 gameOver++;
+                p2Board.textContent = p2Score;
             } else if(a == 1 && b == 1 && c == 1) {
                 winner = 1;
+                p1Score++;
                 gameOver++;
+                p1Board.textContent = p1Score;
             } else if(turn == 9) {
                 gameOver++;
             }
         }
     }
 
-    return {getTurn, playTurn, updateGamestate};
+    const restartGame = () => {
+        gameOver = 0;
+        winner = 0;
+        turn = 1;
+        gamesPlayed++;
+        updateGamestate();
+        board = Gameboard.getBoard();
+    }
+
+    const getBoard = () => board;
+
+    return {getTurn, playTurn, updateGamestate, restartGame, getBoard};
 })();
 
 Gameboard.drawBoard();
@@ -94,8 +133,15 @@ document.querySelector('.gameboard').addEventListener('click', (e) => {
     GameController.playTurn(square);
 });
 
+document.querySelector('.replay').addEventListener('click', (e) => {
+    Gameboard.resetBoard();
+    GameController.restartGame();
+    document.querySelector('.replay').classList.remove('show');
+    document.querySelector('.replay').classList.add('hide');
+});
+
 //TODO
 //add score tracker
-//add replay button
+//add switch turn order on reset
 //add CPU AI
 //indicate player turn with icon and color

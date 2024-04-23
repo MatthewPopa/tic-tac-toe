@@ -2,6 +2,9 @@
 
 :root {
     --background: #555250;
+    --text: #f0ece9;
+    --red: #e67f7f;
+    --blue: #7f9ae6;
 }
 
 body {
@@ -12,7 +15,7 @@ body {
     place-content: center;
     place-items: center;
     background-color: var(--background);
-    color: #f5f3ef;
+    color: var(--text);
     font-family: 'Inter', sans-serif;
     font-weight: 700;
     gap: 1rem;
@@ -22,9 +25,16 @@ body {
     box-sizing: border-box;
 }
 
+.title {
+    font-size: 2.5rem;
+    text-shadow: 0px 3px 5px #31302f;
+    pointer-events: none;
+}
+
 .gamestate {
     font-size: 2rem;
     text-shadow: 0px 3px 5px #31302f;
+    pointer-events: none;
 }
 
 .gameboard {
@@ -36,11 +46,58 @@ body {
     gap: .375rem;
 }
 
+.replay {
+    display: flex;
+    align-items: center;
+    gap: .5rem;
+    font-size: 1.5rem;
+    border-radius: .625rem;
+    border: 2px solid var(--text);
+    padding: .5rem 1rem .5rem .875rem;
+    filter: drop-shadow(0px 3px 5px #31302f);
+    cursor: pointer;
+    visibility: hidden;
+    transition: all .15s, transform 1s;
+    opacity: 0;
+}
+
+.replay.show {
+    visibility: visible;
+    animation: fadeIn .5s forwards;
+}
+
+.replay.hide {
+    visibility: hidden;
+    animation: fadeOut .5s forwards;
+}
+
+@keyframes fadeIn {
+    0% { opacity: 0; }
+  100% { opacity: 1; }
+}
+
+@keyframes fadeOut {
+    0% { opacity: 1; }
+  100% { opacity: 0; }
+}
+
+.replay svg {
+    stroke: var(--text);
+}
+
+.replay:hover {
+    scale: 1.03;
+}
+
+.replay:active {
+    scale: .98;
+}
+
 .square {
     display: flex;
     place-content: center;
     place-items: center;
-    background-color: #f0ece9;
+    background-color: var(--text);
     height: 100%;
     width: 100%;
     cursor: pointer;
@@ -58,7 +115,7 @@ body {
     content: '';
     height: 100%;
     width: 100%;
-    background-color: #f0ece9;
+    background-color: var(--text);
     position: absolute;
     border-radius: .625rem;
     transform: translateZ(-1px);
@@ -82,7 +139,7 @@ body {
 }
 
 .square.p1 svg {
-    fill: #e67f7f;
+    fill: var(--red);
 }
 
 .square.p2 {
@@ -91,5 +148,29 @@ body {
 }
 
 .square.p2 svg {
-    fill: #7f9ae6;
+    fill: var(--blue);
+}
+
+.scoreboard {
+    display: flex;
+    gap: 1rem;
+}
+
+.scoreboard > div {
+    display: flex;
+    align-items: center;
+    gap: .5rem;
+    font-size: 1.5rem;
+    border-radius: .625rem;
+    border: 2px solid var(--text);
+    padding: .5rem 1rem .5rem .875rem;
+    filter: drop-shadow(0px 3px 5px #31302f);
+}
+
+.scoreboard > div.p1 {
+    border: 2px solid var(--red);
+}
+
+.scoreboard > div.p2 {
+    border: 2px solid var(--blue);
 }
